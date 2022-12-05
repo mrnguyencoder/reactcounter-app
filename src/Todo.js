@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 function Todo(props) {
   return (
     <div>
-        <li>{props.todo}</li>
+        <li className={style.toto__list}>{props.task}</li>
     </div>
   )
 }
