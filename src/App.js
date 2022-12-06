@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import './App.css'
 import Todo from './Todo';
 import { db } from './firebase';
-import { query, collection, onSnapshot, QuerySnapshot } from 'firebase/firestore';
+import { query, collection, onSnapshot } from 'firebase/firestore';
 
 
 const style = {
@@ -25,19 +25,19 @@ const style = {
 
 function App() {
     // short time memory todo
-    const [todos, setTodos] = useState(['coding','shopping']);
+    const [todos, setTodos] = useState([]);
     // Read todo from database
     useEffect(() => {
-      const q = query(collection(db, 'todo'))
-      const unsubscribe = onSnapshot(q,(QuerySnapshot) => {
-        let todosArr = []
-        QuerySnapshot.forEach((doc) => {
-            todosArr.push({...doc.data(),id:doc.id})
+        const q = query(collection(db, 'todos'));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+          let todosArr = [];
+          querySnapshot.forEach((doc) => {
+            todosArr.push({ ...doc.data(), id: doc.id });
+          });
+          setTodos(todosArr);
         });
-        setTodos(todosArr)
-      }) 
-      return() => unsubscribe() 
-    },[])
+        return () => unsubscribe();
+      }, []);
 
     // const [input, setInput] = useState ('');
 
@@ -53,7 +53,7 @@ function App() {
         <h1 className={style.todo__title}>
             Todo CRUD
         </h1>
-        <h2 className={style.todo__count}>We have 5 tasks</h2>
+        <h2 className={style.todo__count}>{`We have ${todos.length} tasks`}</h2>
 
         <form className={style.form}>
             <input 
@@ -70,8 +70,8 @@ function App() {
         </form>
             <ul>
                 {/* take from array todos */} 
-                {todos.map(todo => (
-                    <Todo task={todo}/>
+                {todos.map((todo, index) => (
+                    <Todo key={index} todo={todo} />
                 ))}
             </ul>
         

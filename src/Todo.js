@@ -10,13 +10,13 @@ const style = {
   button: `
   flex items-center cursor-pointer`,
 }
-function Todo(props) {
+function Todo({todo}) {
   return (
       <li className={style.toto__list}>
         <div className={style.row}>
           <input type="checkbox" />
           <p className={style.tasks}>
-          {props.task}
+            {todo.todo}
           </p>
         </div>
         <button>Delete</button> 
