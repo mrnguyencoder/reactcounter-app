@@ -25,28 +25,28 @@ const style = {
 
 function App() {
     // short time memory todo
-    const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useState(['coding','shopping']);
     // Read todo from database
     useEffect(() => {
       const q = query(collection(db, 'todo'))
       const unsubscribe = onSnapshot(q,(QuerySnapshot) => {
         let todosArr = []
         QuerySnapshot.forEach((doc) => {
-            todosArr.push(...doc.data(),id: doc.id)
+            todosArr.push({...doc.data(),id:doc.id})
         });
         setTodos(todosArr)
       }) 
       return() => unsubscribe() 
     },[])
 
-    const [input, setInput] = useState ('');
+    // const [input, setInput] = useState ('');
 
-    const addTodo = (event) => {
-        event.preventDefault(); // don not refresh the page when we submit 
+    // const addTodo = (event) => {
+    //     event.preventDefault(); // don not refresh the page when we submit 
          
-        setTodos([...todos, input ]); // fire off when click the button
-        setInput(''); //clearing up input after add
-    }
+    //     // setTodos([...todos, input ]); // fire off when click the button
+    //     // setInput(''); //clearing up input after add
+    // }
     
   return (
     <div className={style.todo}>
@@ -58,13 +58,13 @@ function App() {
         <form className={style.form}>
             <input 
                 className={style.form__input}
-                value={input} 
-                onChange={event => setInput(event.target.value)}
+                // value={input} 
+                // onChange={event => setInput(event.target.value)}
             />
             <button type='submit' 
-                onClick={addTodo} 
+                // onClick={addTodo} 
                 className={style.form__button}
-                disabled={!input} //if the input is blank =>disable the button 
+                // disabled={!input} //if the input is blank =>disable the button 
                  >Add
             </button>
         </form>
