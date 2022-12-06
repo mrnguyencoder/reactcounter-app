@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import './App.css'
 import Todo from './Todo';
+import { db } from './firebase';
+import { query, collection, onSnapshot, QuerySnapshot } from 'firebase/firestore';
+
 
 const style = {
     todo: `
@@ -22,6 +26,19 @@ const style = {
 function App() {
     // short time memory todo
     const [todos, setTodos] = useState([]);
+    // Read todo from database
+    useEffect(() => {
+      const q = query(collection(db, 'todo'))
+      const unsubscribe = onSnapshot(q,(QuerySnapshot) => {
+        let todosArr = []
+        QuerySnapshot.forEach((doc) => {
+            todosArr.push(...doc.data(),id: doc.id)
+        });
+        setTodos(todosArr)
+      }) 
+      return() => unsubscribe() 
+    },[])
+
     const [input, setInput] = useState ('');
 
     const addTodo = (event) => {
